@@ -22,9 +22,3 @@
     $conn->close();
 
 ?>
-
-<script>
-
-    location.href="list.php";
-
-</script>
