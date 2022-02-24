@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  webserver:
+    build: .
+    ports:
+      - "9001:80"
+    links:
+      - mysql:mysql
+    restart: always
+    volumes:
+      - ./html:/var/www/html/
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    platform: linux/x86_64
+    environment:
+      MYSQL_ROOT_PASSWORD: 'json'
+      MYSQL_USER: 'kim'
+      MYSQL_PASSWORD: 'json'
+      MYSQL_DATABASE: 'myDB'
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "52000:3306"
+
