@@ -3,9 +3,13 @@
     # db 연결
     include "../db.php";
 
-    $sql = "SELECT _id,name,title FROM board order by _id desc";
+    # select 쿼리 작성
+    $sql = "SELECT _id, name, title, view_count FROM board order by _id desc";
+
+    # mysql에 쿼리 수행
     $result = $conn->query($sql);
-     
+
+    # mysql 연결 종료
     $conn->close();
 
 ?>
@@ -21,6 +25,7 @@
                 <td>번호</td>
                 <td>제목</td>
                 <td>작가</td>
+                <td>열람수</td>
             </tr>
 
         <?php 
@@ -30,10 +35,11 @@
         <tr>
             <td><?php echo $row["_id"]?></td>
             <td>
-                <?php echo $row["title"]?>  
+                <a href="view.php?_id=<?php echo $row["_id"]?>"><?php echo $row["title"]?></a>
                 <a href="delete.php?_id=<?php echo $row["_id"]?>">삭제</a>
             </td>
             <td><?php echo $row["name"]?></td>
+            <td><?php echo $row["view_count"]?></td>
         </tr>
         <?php 
         }
