@@ -3,8 +3,35 @@
     # db 연결
     include "../db.php";
 
+    // 전체 게시물의 수를 가져오는 쿼리
+    $total_sql = "
+    SELECT
+        count(*) as total
+    FROM
+        board
+    ;
+    ";
+    $total_result = $conn->query($total_sql);
+    $total_row = $total_result->fetch_row();
+
+    $config_list_set_count = 10;    // 페이지당 표시할 게시물의 수
+    $config_list_max_count = 5;     // 하단에 표시할 페이지의 수 
+    $now_page = $_GET["now_page"];  // 현재 위치한 페이지
+    $total_count = $total_row[0];   // 전체 게시물의 수
+
     # select 쿼리 작성
-    $sql = "SELECT _id, name, title, view_count FROM board order by _id desc";
+    $sql = "
+    SELECT 
+        _id, 
+        name, 
+        title, 
+        view_count 
+    FROM 
+        board 
+    order by _id desc
+    LIMIT ".$config_list_set_count * ($now_page-1).",".$config_list_set_count."
+    ;
+    ";
 
     # mysql에 쿼리 수행
     $result = $conn->query($sql);
@@ -46,9 +73,51 @@
         ?>
 
         </table>
+        <?php
+            echo $_GET["now_page"]."</br>";
 
+            // 전체 페이지의 개수
+            $total_page = ceil($total_count / 10);
+
+            // echo "전체 페이지: ".$total_page;
+
+            // 시작 페이지 계산
+            $start = $now_page - $config_list_max_count;
+            // 최소값 보장
+            if ($start <= 0) {
+                $start = 1;
+            }
+
+            // 끝 페이지 계산
+            $end = $now_page + $config_list_max_count;
+            // 최대값 보장
+            if ($end >= $total_page) {
+                $end = $total_page;
+            }
+
+            echo $start."<br/>";
+            echo $end."<br/>";
+
+            // 페이징 만들기
+            for ($i = $start; $i <= $end; $i++) {
+                //현재 페이지는 굵은색 처리
+                if ($i == $now_page) {
+                    echo "[<b>";
+                }
+
+                // GET 방식으로 now_page를 현재 페이지값($i)으로 해서 요청
+                echo "<a href='list.php?now_page=".$i."'>".$i."</a>"." ";
+
+                //현재 페이지는 굵은색 처리
+                if ($i == $now_page) {
+                    echo "</b>]";
+                }
+            }
+        ?>
+
+    <br/>
+    <a href="input.php">글쓰기</a>
     </body>
 
-    <a href="input.php">글쓰기</a>
 </html> 
 
