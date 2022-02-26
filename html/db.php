@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 $mysql_hostname = 'host.docker.internal';
 
 $mysql_username = 'kim';

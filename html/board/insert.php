@@ -7,11 +7,12 @@
     $name = $_POST["name"];
     $title = $_POST["title"];
     $content = $_POST["content"];
+    $board_name = $_POST["board_name"];
 
     # 변수를 사용해서 sql문 작성
     $sql = "
-    INSERT INTO board (name,title,content)
-    VALUES ('". $name ."','". $title ."','".$content."')
+    INSERT INTO board (name,title,content, board_name)
+    VALUES ('". $name ."','". $title ."','".$content."','".$board_name."')
     ";
 
     # mysql에 쿼리 수행
